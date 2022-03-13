@@ -1,0 +1,72 @@
+﻿@model IEnumerable<CRUD_EntityFramework.Models.Livro>
+@{
+    ViewBag.Title = "Index";
+}
+
+<header class="panel_header p-t-10 p-r-10">
+    <h2 class="title pull-left">Lista de Livros</h2>
+    <div class="actions panel_actions pull-right">
+        <a href="@Url.Action("Adicionar", "Livros", new {area=""})" class="btn btn-primary">
+            <i class="glyphicon glyphicon-plus"></i> Novo Livro
+        </a>
+    </div>
+</header>
+<div class="content-body">
+    <div class="table-responsive">
+        <table class="table table-bordered table-condensed custom-table">
+            <thead>
+                <tr>
+                    <th>Nome</th>
+                    <th>Número da Edicao</th>
+                    <th>Autor</th>
+                    <th>Editora</th>
+                    <th>Preço de Venda</th>
+                    <th>Ações</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>@item.Nome</td>
+                        <td>@item.NumeroEdicao</td>
+                        <td>@item.Autor</td>
+                        <td>@item.Editora</td>
+                        <td>@item.PrecoVenda</td>
+                        <td>
+                            <div class="btn-group" role="group" aria-label="Button group with nested dropdown">
+                                <a href="@Url.Action("Editar","Livros",new {area="",id=@item.LivroId })" class="btn btn-sm btn-primary"><i class="glyphicon glyphicon-pencil"></i> Editar</a>
+                                <a href="#" data-href="@Url.Action("Excluir","Livros",new {area="",id=@item.LivroId })" class="btn btn-sm btn-danger delete" data-toggle="modal"
+                                   data-content="Deseja realmente excluir o livro :<b> @item.Nome </b>?" data-id="@item.LivroId"><i class="glyphicon glyphicon-trash"></i> Excluir</a>
+                            </div>
+                        </td>
+                    </tr>
+                }
+
+            </tbody>
+        </table>
+    </div>
+</div>
+<footer class="panel_footer">
+    <div class="actions panel_actions">
+        @if (Model.Any())
+        {
+            <p class="text-center">@Model.Count() Livro(s) Cadastrado(s)</p>
+        }
+    </div>
+    @Html.Partial("_ModalExclusao")
+</footer>
+
+@section scripts
+{
+    <script type="text/javascript">
+
+        $(".delete").on("click", function () {
+            $("#id").val($(this).attr("data-id"))
+            $("#conteudoModalExclusao").empty();
+            $("#conteudoModalExclusao").append($(this).attr("data-content"));
+            $('#ModalExclusao').modal('show');
+        });
+
+    </script>
+}
